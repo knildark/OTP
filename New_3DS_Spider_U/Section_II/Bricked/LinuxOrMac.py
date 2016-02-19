@@ -1,8 +1,8 @@
 import mmap
 import os
 
-os.system('resource/3DSFAT16tool -d -n emuNAND_bricked.bin ctr.bin ../../Section_I/Backup/nand.fat16_0x5_.xorpad')
-os.system('resource/3DSFAT16tool -i -o emuNAND_bricked.bin ctr.bin ../../Section_I/Backup/nand.fat16_0x4_.xorpad')
+os.system('resource/3DSFAT16tool -d -n emuNAND_bricked.bin ctr.bin ../../Section_I/Backup/nand.fat16.xorpad')
+os.system('resource/3DSFAT16tool -i -o emuNAND_bricked.bin ctr.bin ../../Section_I/Backup/nand.fat16.0x4.xorpad')
 os.system('rm ctr.bin')
 
 f1 = open("emuNAND_bricked.bin", "r+b")
