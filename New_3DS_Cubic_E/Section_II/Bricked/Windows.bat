@@ -38,7 +38,7 @@ cd ..
 
 mkdir Unbricked
 
-move Resource/sysNAND.bin Unbricked/sysNAND.bin
-move Resource/emuNAND_bricked.bin .
+move Resource\sysNAND.bin Unbricked\sysNAND.bin
+move Resource\emuNAND_bricked.bin .
 
 pause
