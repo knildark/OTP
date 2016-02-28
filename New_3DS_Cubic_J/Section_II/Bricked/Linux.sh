@@ -7,7 +7,7 @@ fi
 
 echo "Found nand.fat16.xorpad!"
 
-if [ ! -f ../../Section_I/Backup/nand.fat16.xorpad ]; then
+if [ ! -f ../../Section_I/Backup/nand.fat16.0x4.xorpad ]; then
     echo "Could not find nand.fat16.0x4.xorpad in Section_I/Backup!"
     exit 1
 fi
@@ -26,8 +26,8 @@ cd Resource/
 echo "Copying emuNAND, please wait..."
 cp emuNAND_bricked.bin sysNAND.bin
 
-./3DSFAT16tool_Linux -d -n sysNAND.bin ctr.bin ../../../Section_I/Backup/nand.fat16.xorpad
-./3DSFAT16tool_Linux -i -o sysNAND.bin ctr.bin ../../../Section_I/Backup/nand.fat16.0x4.xorpad
+./3DSFAT16tool_Linux -d sysNAND.bin ctr.bin ../../../Section_I/Backup/nand.fat16.xorpad
+./3DSFAT16tool_Linux -i sysNAND.bin ctr.bin ../../../Section_I/Backup/nand.fat16.0x4.xorpad
 
 dd conv=notrunc if=NCSD_header_o3ds.bin of=sysNAND.bin
 
