@@ -19,66 +19,41 @@
     </section>
 
     <section class="main-content">
-      <p><em>While not a requirement anymore, a hardmod is still recommended.</em></p>
+      <p><em>Traducción al español a partir de la Guía original de <a href="https://github.com/Plailect/OTP">https://github.com/Plailect/OTP</a></em></p>
 
 <h2>
-<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction</h2>
+<a id="introducción" class="anchor" href="#introducci%C3%B3n" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introducción</h2>
 
-<p>This is, to the best of my knowledge, the first public comprehensive guide to getting the console specific OTP for the 3DS.</p>
+<p>Esta guía te llevará por todos los pasos para downgradear a la versión 2.1 para obtener el OTP, el cual ha sido bloqueado para su obtención con la salida de la versión 3.X (sin algún truco de hardware).</p>
 
-<p>This guide will take you through the steps of downgrading to version 2.1 to get the OTP, which was blocked from our reach with the release of 3.X (without some hardware trickery).</p>
+<p><strong>Esta guía servirá para New 3DS, Old 3DS y 2DS en las regiones U, E, y J. Las regiones C, K, y T lanzadas con la versión 4.X, que es después del bloqueo del OTP, como tales <em>no pueden</em> ser downgradeadas lo suficiente para usar esta guía.</strong></p>
 
-<p><strong>This guide will work on New 3DS, Old 3DS, and 2DS in the U, E, and J regions. The C, K, and T regions shipped with version 4.X which is after the OTP lockout, and as such <em>cannot</em> downgrade far enough to use this guide.</strong></p>
+<p>Las regiones C, K, y T podrían ser capaces de cambiarse a las regiones U, E o J temporalmente, pero eso está fuera del alcanze de esta guía.</p>
 
-<p>C, K, and T regions may be able to switch to U, E, or J temporarily but that is outside of the scope of this guide.</p>
+<p>El método para volvar el OTP sin un hardmod (relativamente) de forma segura, fue originalmente creado por @github/Plailect y fue influenciado por conversaciones con AHP_Person, Normmatt, y Vappy. La guía está basada en las notas personales de @github/Plailect que puedes ver <a href="https://www.irccloud.com/pastebin/SfsLwHWS/OTP+Notes">aquí</a> y fueron creadas de principio a fin en alrededor de 14 días.</p>
 
-<p>The method for dumping the OTP without a hardmod (relatively) safely was originally created by me and was influenced by conversations with AHP_Person, Normmatt, and Vappy. The guide was based off my own personal notes you can see <a href="https://www.irccloud.com/pastebin/SfsLwHWS/OTP+Notes">here</a> and was created from start to finish in about 14 days.</p>
-
-<p>This guide was written by me with the process refined and software developed by the fine folks over at #Cakey on Freenode. See the bottom of this page for the full credits, this guide would not exist without them.</p>
-
-<h2>
-<a id="abstract" class="anchor" href="#abstract" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Abstract</h2>
-
-<p>The OTP is a 0x100 byte region of seemingly random data at address 0x10012000. It is presumed that console unique keys are derived from this region, although it is currently unknown exactly how. The region is likely the console unique data store which is decrypted by the bootrom, but we don't know how that is done until somebody dumps the full protected bootrom. It is unknown at this time if anyone has successfully dumped the protected bootrom.</p>
-
-<p>Prior to version 3.0.0-X, Nintendo locked access to this region using Kernel9, presumably under the assumption that an attacker would never gain access to arm9 userland (as arm9 kernel and userland are functionally identical thanks to svc 0x7B).</p>
-
-<p>After version 3.0.0-X, Nintendo switched to locking this region using the register CFG_SYSPROT9, which also locks the bootloader and is set extremely early in boot, long before we are able to gain code execution. This register can be set exactly once, and cannot be switched off until the unit is fully powered off, and therefore it is impossible to dump the full OTP without a version 2.1.0-X or below.</p>
-
-<p>There is, however, a method to dump the hash of the OTP on version 9.6.0-X. Because Kernel9Loader does not clear the SHA_HASH register after it has been used, dumping the SHA_HASH will give the hash of the OTP which was handed over to Kernel9 from Kernel9Loader. In addition, there is a long standing vulnerability where an MCU reboot caused by the i2c will not clear RAM like it's supposed to.</p>
-
-<p>This allows for a hardware based attack where arbitrary data is written to nand_sector96+0x10 in a sysNAND backup and flashed to the device. Afterwards we wire the i2c to MCU reboot on our command, write a payload (which will write 0x1000A040 - 0x1000A060 to a file on the SD card) to arm9 memory somewhere, fill all memory with a NOP sled followed by a JMP instruction pointing to the payload. We can then MCU reboot repeatedly (incrementing nand_sector96+0x10 by 1 each time) until the Kernel9Loader jumps to the payload by random chance.</p>
-
-<p>Because of the complexity and extra hardware involved in the method described above, I have decided to limit the scope of this guide strictly to the software based approach of downgrading to a version below 3.0.0-X. Version 2.1.0-X was selected because it is the only version below 3.0.0-X that contains a fully exploitable browser version (2.0.0-X has a partially exploitable browser, but it won't work for other reasons).</p>
-
-<p>This guide will take you through the process of downgrading you emuNAND to 2.1.0-X to ensure you do not get a partial downgrade (which is when some titles are on one version and others are on a different version) which are difficult to recover from. On the New 3DS you must then decrypt with your console's 0x5 xorpad (which is New 3DS only) and then reencrypt with your console's 0x4 xorpad. Afterwards you overwrite the New 3DS's NAND NCSD (the header that specifies each partition's location) with the NCSD from an Old 3DS and flash the emuNAND to sysNAND. These steps are unneeded on an Old 3DS.</p>
+<p>Esta guía fue traducida por mi (knildark) y con aportes obtenidos de <a href="https://plus.google.com/103887204870368587707">Albus Percibal</a> en su <a href="http://a9lh3ds.blogspot.cl/">blog</a>, pero originalmente fue escrita por @github/Plailect en <a href="https://github.com/Plailect/OTP">Plailect/OTP</a> con el proceso de refinado y desarrollo de software de los chicos en #Cakey on Freenode. Ve el final de esta página para todos los créditos, esta guía no existiría sin él ni ellos.</p>
 
 <h2>
 <a id="faq--tldr" class="anchor" href="#faq--tldr" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FAQ / TL;DR</h2>
 
 <ul>
-<li>
-<em>What is the OTP?</em> -
-The OTP is a console unique region from which console specific keys seem to be derived, although it is unknown how. More info here: <a href="https://3dbrew.org/wiki/OTP_Registers">https://3dbrew.org/wiki/OTP_Registers</a>
-</li>
-<li>
-<em>What can I do with my OTP?</em> -
-The OTP is a requirement to use Arm9loaderhax, which gets you, among other things, 100% boot rate, emuNAND boot speed almost as fast as regular sysNAND (using something like AuReiNand), and very early Arm9 access. In the future, this will allow for running things like Decrypt9 to unbrick yourself without a hardmod and other awesome tools.</li>
-<li>
-<em>Why do we have to downgrade to get it?</em> -
-Since version 3.0, the OTP is locked out early in sysNAND boot. There is a New 3DS only exploit that works on 9.6, but it requires extra hardware. The solution we are using is to downgrade emuNAND (to ensure we don't partial downgrade) to 2.1, then flash emuNAND to sysNAND to get the OTP.</li>
-<li>
-<em>What version do I have to be on?</em> -
-This guide assumes 9.2; any lower version may work, but you're on your own for that.</li>
-<li>
-<em>What's the current brick rate?</em> -
-This guide should work without a hardmod safely as long as you follow all instructions.</li>
+<li><p><em>¿Qué es el OTP?</em> -
+El OTP es una región única de la consola donde la llaves específicas de la consola al parecer son guardadas, aunque esto es desconocido cómo se logra. Para más información leer acá: <a href="https://3dbrew.org/wiki/OTP_Registers">https://3dbrew.org/wiki/OTP_Registers</a></p></li>
+<li><p><em>¿Qué puedo hacer con mi OTP?</em> -
+El OTP es el requerimiento principal para usar Arm9loaderHax, el cual te permite, entre otras cosas, 100% de chance inicio, velocidad de inicio de la emuNAND casi tan rápida como una SysNAND regular (usando algo como AuReiNand). Actualmente, esto permite ejecutar cosas como Decrypt9 para des-brickear tu mismo la consola sin necesidad de un hardmod o otras herramientas.</p></li>
+<li><p><em>¿Por qué tenemos que downgradear para obtenerlo?</em> -
+Desde la versión 3.0, el OTP es bloqueado antes de que inicie la sysNAND. Hay un exploit único en la New 3DS que funciona en 9.6, pero requiere hardware adicional. La solución que estamos usando es downgradear la emuNAND (para asegurarnos que no hagamos un downgrade incompleto) a 2.1, y luego flasheamos la emuNAND en la sysNAND para obtener el OTP.</p></li>
+<li><p><em>¿En qué versión debería tener mi consola?</em> -
+Esta guía asume que estás en 9.2; cualquier versión menor debería funcionar, pero corre bajo tu propio riesgo.</p></li>
+<li><p><em>¿Cual es la chance de un brickeo?</em> -
+Esta guía debería funcionar de forma segura sin un hardmod siempre y cuando sigas todas las intrucciones al pie de la letra.</p></li>
 </ul>
 
 <h2>
-<a id="get-started" class="anchor" href="#get-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get Started</h2>
+<a id="empezar" class="anchor" href="#empezar" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Empezar!</h2>
 
-<p><em>Click the appropriate link below:</em></p>
+<p><em>Abre el enlace apropiado a tu consola abajo:</em></p>
 
 <table>
 <thead>
@@ -89,12 +64,8 @@ This guide should work without a hardmod safely as long as you follow all instru
 </thead>
 <tbody>
 <tr>
-<td align="center"><a href="https://github.com/Plailect/OTP/blob/master/New_3DS_Cubic.md">With Cubic Ninja</a></td>
-<td align="center"><a href="https://github.com/Plailect/OTP/blob/master/Old_3DS_Cubic.md">With Cubic Ninja</a></td>
-</tr>
-<tr>
-<td align="center"><a href="https://github.com/Plailect/OTP/blob/master/New_3DS_Spider.md">Without Cubic Ninja</a></td>
-<td align="center"><a href="https://github.com/Plailect/OTP/blob/master/Old_3DS_Spider.md">Without Cubic Ninja</a></td>
+<td align="center"><a href="#">Pronto!</a></td>
+<td align="center"><a href="https://github.com/knildark/OTP/blob/master/Old_3DS_Spider.md">Click Aquí</a></td>
 </tr>
 </tbody>
 </table>
@@ -157,33 +128,6 @@ This guide should work without a hardmod safely as long as you follow all instru
 </tr>
 </tbody>
 </table>
-
-<h2>
-<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Credits</h2>
-
-<ul>
-<li>AHP_Person for code.bin</li>
-<li>Normmatt for load.bin</li>
-<li>yellows8 for answering my questions</li>
-<li>b1l1s (he's back baby) for being fucking amazing</li>
-<li>mid-kid for letting us use his channel</li>
-<li>Gelex for being fucking amazing</li>
-<li>dank101 for testing</li>
-<li>Vappy for emotional support</li>
-<li>MassExplosion123 for answering questions</li>
-<li>Psi-Hate for testing</li>
-<li>Shadowtrance for answering questions and testing</li>
-<li>icecream for testing</li>
-<li>s_99 for emotional support</li>
-<li>dark_samus for testing</li>
-<li>Urbanshadow for fixing my python script</li>
-<li>Mrrraou for helping with support</li>
-<li>felipejfc for compiling the Mac version of 3DSFAT16tool for me</li>
-<li>dukesrg for hosting 2xrsa</li>
-<li>all of #Cakey on Freenode for being awesome</li>
-</ul>
-
-<p><em>If I forgot you here, contact me and I'll add your name.</em></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/knildark/OTP">OTP Guide - R2.3</a> is maintained by <a href="https://github.com/knildark">knildark</a>.</span>
