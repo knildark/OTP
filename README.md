@@ -1,4 +1,4 @@
-*Traducción al español a partir de la Guía original de https://github.com/Plailect/OTP*
+*Traducción al español a partir de la Guía original https://github.com/Plailect/OTP*
 
 ## Introducción
 
@@ -8,9 +8,9 @@ Esta guía te llevará por todos los pasos para downgradear a la versión 2.1 pa
 
 Las regiones C, K, y T podrían ser capaces de cambiarse a las regiones U, E o J temporalmente, pero eso está fuera del alcanze de esta guía.
 
-El método para volvar el OTP sin un hardmod (relativamente) de forma segura, fue originalmente creado por @github/Plailect y fue influenciado por conversaciones con AHP_Person, Normmatt, y Vappy. La guía está basada en las notas personales de @github/Plailect que puedes ver [aquí](https://www.irccloud.com/pastebin/SfsLwHWS/OTP+Notes) y fueron creadas de principio a fin en alrededor de 14 días.
+El método para volvar el OTP sin un hardmod (relativamente) de forma segura, fue originalmente creado por [Plailect](https://github.com/Plailect/) y fue influenciado por conversaciones con AHP_Person, Normmatt, y Vappy. La guía está basada en las notas personales de [Plailect](https://github.com/Plailect/) que puedes ver [aquí](https://www.irccloud.com/pastebin/SfsLwHWS/OTP+Notes) y fueron creadas de principio a fin en alrededor de 14 días.
 
-Esta guía fue traducida por mi (knildark) y con aportes obtenidos de [Albus Percibal]( https://plus.google.com/103887204870368587707) en su [blog](http://a9lh3ds.blogspot.cl/), pero originalmente fue escrita por @github/Plailect en [Plailect/OTP](https://github.com/Plailect/OTP) con el proceso de refinado y desarrollo de software de los chicos en #Cakey on Freenode. Ve el final de esta página para todos los créditos, esta guía no existiría sin él ni ellos.
+Esta guía fue traducida por mi (knildark) y con aportes obtenidos de [Albus Percibal]( https://plus.google.com/103887204870368587707) en su [blog](http://a9lh3ds.blogspot.cl/), pero originalmente fue escrita por [Plailect](https://github.com/Plailect/)Plailect en [Plailect/OTP](https://github.com/Plailect/OTP) con el proceso de refinado y desarrollo de software de los chicos en #Cakey on Freenode. Ve el final de esta página para todos los créditos, esta guía no existiría sin él ni ellos.
 
 ## FAQ / TL;DR
 
