@@ -36,7 +36,7 @@ Esta guía fue traducida por mi (knildark) y con aportes obtenidos de [Albus Per
 New 3DS | Old 3DS / 2DS
 :---: | :---:
 [Con Cubic Ninja (Pronto!)](#) | [Con Cubic Ninja (Pronto!)](#)
-[Sin Cubic Ninja](#) | [Sin Cubic Ninja](https://github.com/knildark/OTP/blob/master/Old_3DS_Spider.md)
+[Sin Cubic Ninja (Pronto!)](#) | [Sin Cubic Ninja](https://github.com/knildark/OTP/blob/master/Old_3DS_Spider.md)
 
 Pack .zip | SHA-256
 :---: | :---:
